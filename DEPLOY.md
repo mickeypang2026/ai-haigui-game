@@ -102,14 +102,52 @@ docker run -p 8787:8787 --env-file .env ai-haigui-game
 
 后端代码需要适配 Cloudflare Workers 运行时。
 
-## 前端静态资源部署
+## 前端部署到 Vercel
 
-可将 `dist/` 目录部署到：
+### 步骤
 
-- **Vercel**: `vercel deploy --prod`
-- **Netlify**: 拖拽 `dist/` 到 Netlify Drop
-- **GitHub Pages**: 使用 `gh-pages` 包
-- **Nginx**: 配置静态文件服务
+1. **访问 Vercel**: https://vercel.com/new
+
+2. **导入 Git 仓库**:
+   - 选择 "Import Git Repository"
+   - 找到 `mickeypang2026/ai-haigui-game`
+   - 点击 "Import"
+
+3. **配置项目** (可选，已自动检测):
+   - **Framework Preset**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+   - **Install Command**: `npm install`
+
+4. **环境变量** (如需要):
+   - 如果前端需要访问后端 API，添加 `BACKEND_URL`
+
+5. **点击 "Deploy"**
+
+### 配置后端 API 代理
+
+编辑 `vercel.json` 中的 `rewrites` 配置，将后端地址改为你的实际地址：
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://你的后端地址.com/api/$1"
+    }
+  ]
+}
+```
+
+### 部署后
+
+- 自动构建：每次推送到 GitHub 自动部署
+- 预览部署：每个 PR 自动生成预览链接
+- 自定义域名：在 Vercel 设置中配置
+
+---
+
+## 后端静态资源部署
 
 ### Nginx 配置示例
 

@@ -10,5 +10,8 @@
       "source": "/api/(.*)",
       "destination": "https://your-backend-url.railway.app/api/$1"
     }
-  ]
+  ],
+  "env": {
+    "BACKEND_URL": "https://your-backend-url.railway.app"
+  }
 }
