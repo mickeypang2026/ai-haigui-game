@@ -9,7 +9,9 @@
       "Bash(curl:*)",
       "Bash(findstr 5173)",
       "Read(//d/D/study/project/**)",
-      "Bash(npm list:*)"
+      "Bash(npm list:*)",
+      "Bash(npx tsx:*)",
+      "Bash(gh:*)"
     ]
   }
 }

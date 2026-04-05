@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ChatBox from '../../components/ChatBox'
-import { createSession, getSession, askQuestion, submitFinalGuess } from '../lib/api'
+import { createSession, getSession, askQuestion, submitFinalGuess, endSession } from '../lib/api'
 
 /**
  * 游戏状态
@@ -143,7 +143,7 @@ export function Game() {
 
     try {
       console.log('[Game] 调用 submitFinalGuess API')
-      const data = await submitFinalGuess(sessionId, guess.trim())
+      await submitFinalGuess(sessionId, guess.trim())
       console.log('[Game] 提交成功，跳转到 Result 页面')
       // 提交成功后跳转到 Result 页面显示结果
       navigate(`/result/${sessionId}`)

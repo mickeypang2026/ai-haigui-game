@@ -5,6 +5,7 @@ export interface MessageProps {
   question?: string
   answer?: YesNoIrrelevant
   timestamp?: number
+  isDefaultAnswer?: boolean // 标记是否为默认回答
 }
 
 /**
@@ -12,7 +13,7 @@ export interface MessageProps {
  * - 用户消息：右侧，蓝色系
  * - AI 主持人消息：左侧，金色/紫色系
  */
-export function Message({ role, question, answer, timestamp }: MessageProps) {
+export function Message({ role, question, answer, timestamp, isDefaultAnswer }: MessageProps) {
   const isUser = role === 'user'
   const timeLabel = timestamp ? formatTime(timestamp) : ''
 
@@ -80,7 +81,12 @@ export function Message({ role, question, answer, timestamp }: MessageProps) {
         {/* 答案气泡（仅 AI） */}
         {answer && (
           <div className="mt-2">
-            <AnswerBadge answer={answer} />
+            <AnswerBadge answer={answer} isDefaultAnswer={isDefaultAnswer} />
+            {isDefaultAnswer && answer === '无关' && (
+              <p className="text-xs text-amber-500/80 mt-1.5 px-1">
+                主持人没有理解你的问题，请尝试重新表述或提出更具体的"是/否"问题
+              </p>
+            )}
           </div>
         )}
 
@@ -96,7 +102,7 @@ export function Message({ role, question, answer, timestamp }: MessageProps) {
 /**
  * 答案徽章组件 - 显示 AI 的回答（是/否/无关）
  */
-function AnswerBadge({ answer }: { answer: YesNoIrrelevant }) {
+function AnswerBadge({ answer, isDefaultAnswer }: { answer: YesNoIrrelevant; isDefaultAnswer?: boolean }) {
   const config = {
     是: {
       bg: 'bg-emerald-500/20 border-emerald-500/40',
@@ -143,7 +149,9 @@ function AnswerBadge({ answer }: { answer: YesNoIrrelevant }) {
 
   return (
     <div
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${bg} ${text} font-medium text-sm shadow-sm`}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${bg} ${text} font-medium text-sm shadow-sm ${
+        isDefaultAnswer ? 'opacity-70' : ''
+      }`}
     >
       {icon}
       <span>{answer}</span>

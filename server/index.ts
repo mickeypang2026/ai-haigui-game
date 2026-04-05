@@ -11,14 +11,35 @@ import { STORIES } from './stories'
 import type { Session, YesNoIrrelevant } from './types'
 import aiApiRouter from './aiApi'
 
+/**
+ * 验证 AI 回答是否为有效值
+ */
+function isValidAnswer(answer: unknown): answer is YesNoIrrelevant {
+  return answer === '是' || answer === '否' || answer === '无关'
+}
+
 const app = express()
 
 // 配置 CORS - 允许前端访问
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL,
+].filter(Boolean) as string[]
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'], // 允许的前端地址
-  credentials: true, // 允许携带 Cookie
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的方法
-  allowedHeaders: ['Content-Type', 'Authorization'], // 允许的请求头
+  origin: function (origin, callback) {
+    // 允许没有 origin 的请求（如 Postman、curl）
+    if (!origin) return callback(null, true)
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }))
 
 // 解析 JSON 请求体
@@ -111,8 +132,17 @@ app.post('/api/session/:id/question', async (req, res) => {
   const question = typeof req.body?.question === 'string' ? req.body.question.trim() : ''
   if (!question) return res.status(400).json({ message: 'Question is required.' })
 
-  const answer: YesNoIrrelevant = await judgeQuestion({ truth: session.truth, question })
-  session.conversation.push({ question, answer, createdAt: Date.now() })
+  let answer: YesNoIrrelevant = await judgeQuestion({ truth: session.truth, question })
+  let isDefaultAnswer = false
+
+  // 验证 AI 回答是否规范，如果不规范则返回默认回答
+  if (!isValidAnswer(answer)) {
+    console.warn('[Server] AI 回答不规范，使用默认回答 "无关"', { question, answer })
+    answer = '无关' // 默认回答
+    isDefaultAnswer = true
+  }
+
+  session.conversation.push({ question, answer, createdAt: Date.now(), isDefaultAnswer } as any)
 
   saveSession(session)
   const story = STORIES.find(s => s.id === session.storyId)

@@ -7,6 +7,7 @@ interface ConversationItem {
   question: string
   answer: YesNoIrrelevant
   createdAt: number
+  isDefaultAnswer?: boolean // 标记是否为默认回答
 }
 
 export interface ChatBoxProps {
@@ -104,6 +105,7 @@ export function ChatBox({
                 question={item.question}
                 answer={item.answer}
                 timestamp={item.createdAt}
+                isDefaultAnswer={item.isDefaultAnswer}
               />
             ))}
           </>

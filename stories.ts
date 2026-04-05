@@ -43,15 +43,50 @@ export const stories: Story[] = [
     difficulty: 'medium',
     surface: '一个女人独自在家，听到楼上有脚步声。她确定家里只有一个人。她报警后，警察来了却什么也没发现。第二天，女人死了。',
     bottom: '女人是孕妇，"楼上"其实是她肚子里的胎儿在动。她误以为有入侵者，精神高度紧张导致早产并发症。警察检查时胎儿已停止心跳，但女人因感染和失血过多死亡。'
+  },
+  {
+    id: 'story-006',
+    title: '海龟汤',
+    difficulty: 'easy',
+    surface: '一个男人走进餐厅，点了一碗海龟汤。他喝了一口，问服务员："这真的是海龟汤吗？"服务员说："是的。"男人听后自杀了。为什么？',
+    bottom: '男人曾和父亲在海上遇难，父亲给他一碗"肉汤"救了他，自己却死了。父亲说那是海龟汤。多年后在餐厅，他发现真正的海龟汤味道完全不同，意识到当年喝的是父亲的肉，无法承受真相而自杀。'
+  },
+  {
+    id: 'story-007',
+    title: '雨夜的广播',
+    difficulty: 'medium',
+    surface: '一个男人在雨夜开车，听到广播说附近有杀人魔逃跑了。他突然很害怕，但还是继续开车回家。第二天，人们发现他死在车里。为什么？',
+    bottom: '男人开车时听到车后座有动静，但他不敢回头。广播说杀人魔会躲在车后座。他强作镇定继续开车，到家后发现杀人魔早已坐在后座，他被活活吓死。'
+  },
+  {
+    id: 'story-008',
+    title: '镜子里的女人',
+    difficulty: 'medium',
+    surface: '一个女人在照镜子时，突然尖叫起来。几分钟后，她死了。为什么？',
+    bottom: '女人是盲人，刚做完眼角膜移植手术。她第一次看到镜子里的自己，发现移植的角膜来自一个她认识的人——那个人被她杀害后捐出了器官。她因极度恐惧和愧疚而死。'
+  },
+  {
+    id: 'story-009',
+    title: '生日蛋糕',
+    difficulty: 'hard',
+    surface: '一个小女孩过生日，妈妈给她买了一个漂亮的蛋糕。小女孩切了一块蛋糕给妈妈，妈妈吃了后死了。为什么？',
+    bottom: '妈妈有严重的糖尿病，不能吃甜食。但小女孩不知道，因为妈妈一直隐瞒病情不想让孩子担心。蛋糕上写了"妈妈永远爱你"，妈妈为了不让女儿失望，明知有毒还是吃了下去。'
+  },
+  {
+    id: 'story-010',
+    title: '最后一班地铁',
+    difficulty: 'hard',
+    surface: '一个男人每天都是最后一班地铁的常客。某天，他照常上了最后一班地铁，但再也没有下车。为什么？',
+    bottom: '男人是地铁司机，他"上"的是驾驶室。当晚地铁在隧道中发生事故，他为了救乘客选择留在驾驶位，最终随列车坠毁。乘客们获救了，但他再也没有离开驾驶室。'
   }
 ];
 
 // 导出辅助函数：根据难度筛选故事
 export function getStoriesByDifficulty(difficulty: Story['difficulty']): Story[] {
-  return stories.filter(story => story.difficulty === difficulty);
+  return STORIES.filter(story => story.difficulty === difficulty);
 }
 
 // 导出辅助函数：根据 ID 获取故事
 export function getStoryById(id: string): Story | undefined {
-  return stories.find(story => story.id === id);
+  return STORIES.find(story => story.id === id);
 }
