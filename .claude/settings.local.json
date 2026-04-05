@@ -11,7 +11,8 @@
       "Read(//d/D/study/project/**)",
       "Bash(npm list:*)",
       "Bash(npx tsx:*)",
-      "Bash(gh:*)"
+      "Bash(gh:*)",
+      "WebFetch(domain:ai-haigui-game-alpha.vercel.app)"
     ]
   }
 }

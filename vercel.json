@@ -4,15 +4,5 @@
   "outputDirectory": "dist",
   "devCommand": "npm run dev:web",
   "installCommand": "npm install",
-  "framework": "vite",
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://ai-haigui-game-production-5e7b.up.railway.app/api/$1"
-    },
-    {
-      "source": "/((?!_next/static|_next/image|favicon\\.svg|icons\\.svg).*)",
-      "destination": "/index.html"
-    }
-  ]
+  "framework": "vite"
 }
