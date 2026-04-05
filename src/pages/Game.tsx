@@ -146,16 +146,27 @@ export function Game() {
 
   // 提交最终猜测
   async function handleSubmitGuess() {
-    if (!sessionId || !guess.trim()) return
+    console.log('[Game] 提交最终猜测，sessionId:', sessionId, 'guess:', guess)
+    if (!sessionId) {
+      console.error('[Game] 缺少 sessionId')
+      return
+    }
+    if (!guess.trim()) {
+      console.error('[Game] 猜测为空')
+      return
+    }
 
     setSubmitting(true)
     setError(null)
 
     try {
+      console.log('[Game] 调用 submitFinalGuess API')
       const data = await submitFinalGuess(sessionId, guess.trim())
+      console.log('[Game] 提交成功，跳转到 Result 页面')
       // 提交成功后跳转到 Result 页面显示结果
       navigate(`/result/${sessionId}`)
     } catch (e) {
+      console.error('[Game] 提交失败:', e)
       setError(e instanceof Error ? e.message : '提交失败')
     } finally {
       setSubmitting(false)
@@ -320,7 +331,7 @@ export function Game() {
                 type="button"
                 onClick={() => void handleSubmitGuess()}
                 disabled={submitting || !guess.trim()}
-                className="rounded-lg bg-amber-400 px-6 py-2 text-sm font-medium text-slate-900 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
+                className="rounded-lg bg-amber-400 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {submitting ? '提交中...' : '提交猜测'}
               </button>
