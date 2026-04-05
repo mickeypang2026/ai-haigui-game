@@ -1,0 +1,57 @@
+// 海龟汤故事数据类型定义
+export interface Story {
+  id: string;
+  title: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  surface: string;  // 汤面 - 给玩家看的故事描述
+  bottom: string;   // 汤底 - 事件完整真相
+}
+
+// 海龟汤故事数据
+export const stories: Story[] = [
+  {
+    id: 'story-001',
+    title: '半夜的敲门声',
+    difficulty: 'easy',
+    surface: '一个男人独自住在公寓里。某天半夜，他听到敲门声，打开门却没人。他关上门继续睡觉。第二天，他死了。',
+    bottom: '男人是盲人，依靠敲门声判断访客。当晚敲门的是他的导盲犬，导盲犬叼着救命药想给他，但他没意识到。他因疾病发作无人救助而死。'
+  },
+  {
+    id: 'story-002',
+    title: '红色的水',
+    difficulty: 'medium',
+    surface: '一个女孩走进餐厅，点了一杯水。服务员给了她一杯红色的水。女孩喝了一口，然后自杀了。',
+    bottom: '女孩和哥哥曾在沙漠中迷路，哥哥给她一杯"水"救了她，自己却死了。那杯水其实是哥哥的血。多年后在餐厅，她发现红色的水味道和当年一样，意识到当年喝的是哥哥的血，无法承受愧疚而自杀。'
+  },
+  {
+    id: 'story-003',
+    title: '电梯里的男人',
+    difficulty: 'easy',
+    surface: '一个男人每天坐电梯到 10 楼上班。下班时，他总是坐电梯到 1 楼。但下雨天，他会坐到 5 楼，然后走楼梯到 1 楼。为什么？',
+    bottom: '男人是个侏儒，身高只能够到电梯的 5 楼按钮。下雨天他带着伞，可以用伞尖按到 1 楼按钮，所以能直接到 1 楼。平时够不到，只能到 5 楼再走楼梯。'
+  },
+  {
+    id: 'story-004',
+    title: '消失的子弹',
+    difficulty: 'hard',
+    surface: '警察发现一具尸体，死者头部中弹。现场只有一把手枪，枪里少了一颗子弹。法医却说："这不是自杀，是他杀。"为什么？',
+    bottom: '死者是马戏团演员，表演"吞子弹"特技。凶手在表演时真的开枪了，子弹被死者吞下后卡在喉咙，后来移动到头部致命位置。枪里少的子弹就是那颗，所以看似中弹实为吞弹致死。'
+  },
+  {
+    id: 'story-005',
+    title: '空房间的脚步声',
+    difficulty: 'medium',
+    surface: '一个女人独自在家，听到楼上有脚步声。她确定家里只有一个人。她报警后，警察来了却什么也没发现。第二天，女人死了。',
+    bottom: '女人是孕妇，"楼上"其实是她肚子里的胎儿在动。她误以为有入侵者，精神高度紧张导致早产并发症。警察检查时胎儿已停止心跳，但女人因感染和失血过多死亡。'
+  }
+];
+
+// 导出辅助函数：根据难度筛选故事
+export function getStoriesByDifficulty(difficulty: Story['difficulty']): Story[] {
+  return stories.filter(story => story.difficulty === difficulty);
+}
+
+// 导出辅助函数：根据 ID 获取故事
+export function getStoryById(id: string): Story | undefined {
+  return stories.find(story => story.id === id);
+}

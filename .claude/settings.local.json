@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(netstat -ano)",
+      "Bash(findstr 8787)",
+      "Bash(curl:*)",
+      "Bash(findstr 5173)",
+      "Read(//d/D/study/project/**)",
+      "Bash(npm list:*)"
+    ]
+  }
+}
