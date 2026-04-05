@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ChatBox from '../../components/ChatBox'
-import { createSession, endSession, getSession, askQuestion } from '../lib/api'
+import { createSession, endSession, getSession, askQuestion, submitFinalGuess } from '../lib/api'
 
 /**
  * 游戏状态
@@ -22,6 +22,10 @@ export function Game() {
   const [conversation, setConversation] = useState<Array<{ question: string; answer: '是' | '否' | '无关'; createdAt: number }>>([])
   const [truthUnlocked, setTruthUnlocked] = useState(false)
   const [gameStatus, setGameStatus] = useState<GameStatus>('playing')
+
+  // 最终猜测状态
+  const [guess, setGuess] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   // UI 状态
   const [loading, setLoading] = useState(false)
@@ -138,6 +142,24 @@ export function Game() {
   function handleRevealTruth() {
     if (!sessionId) return
     navigate(`/result/${sessionId}`)
+  }
+
+  // 提交最终猜测
+  async function handleSubmitGuess() {
+    if (!sessionId || !guess.trim()) return
+
+    setSubmitting(true)
+    setError(null)
+
+    try {
+      const data = await submitFinalGuess(sessionId, guess.trim())
+      // 提交成功后跳转到 Result 页面显示结果
+      navigate(`/result/${sessionId}`)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '提交失败')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   // 放弃游戏 - 直接返回大厅
@@ -272,6 +294,39 @@ export function Game() {
             onSend={handleSendQuestion}
           />
         </section>
+
+        {/* 最终猜测区域 - 游戏进行中显示 */}
+        {!isGameEnded && (
+          <section className="rounded-xl border border-amber-700/30 bg-gradient-to-br from-amber-950/20 to-slate-900/50 p-5 shadow-lg">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-xl">🎲</span>
+              <h2 className="text-lg font-semibold text-amber-400">提交最终猜测</h2>
+            </div>
+            <p className="text-sm text-slate-400 mb-3">
+              如果你已经推理出真相，请提交最终猜测。提交后将揭晓汤底并判定结果。
+            </p>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <input
+                value={guess}
+                onChange={(e) => setGuess(e.target.value)}
+                disabled={submitting || loading}
+                placeholder="我认为真相是……"
+                className="flex-1 rounded-lg border border-slate-700 bg-slate-950/40 px-4 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') void handleSubmitGuess()
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => void handleSubmitGuess()}
+                disabled={submitting || !guess.trim()}
+                className="rounded-lg bg-amber-400 px-6 py-2 text-sm font-medium text-slate-900 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {submitting ? '提交中...' : '提交猜测'}
+              </button>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   )
