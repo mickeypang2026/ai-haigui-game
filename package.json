@@ -10,26 +10,26 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  "devDependencies": {
-    "@tailwindcss/vite": "^4.2.2",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vercel/node": "^5.7.0",
-    "@vitejs/plugin-react": "^6.0.1",
-    "concurrently": "^9.2.1",
-    "tailwindcss": "^4.2.2",
-    "tsx": "^4.21.0",
-    "typescript": "~5.9.3",
-    "vite": "^8.0.1"
-  },
   "dependencies": {
+    "@vercel/node": "^5.7.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
+    "tailwindcss": "^4.2.2",
+    "tsx": "^4.21.0",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.1"
   }
 }

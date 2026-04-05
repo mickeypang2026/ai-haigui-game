@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'https://ai-haigui-game-production-5e7b.up.railway.app';
+const BACKEND_URL = 'https://ai-haigui-game-production-5e7b.up.railway.app';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // 设置 CORS 头
@@ -14,9 +14,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // 构建目标 URL
-    const targetPath = req.url?.startsWith('/api') ? req.url.slice(4) : req.url;
-    const targetUrl = `${BACKEND_URL}/api${targetPath}`;
+    // 构建目标 URL - 移除 /api 前缀
+    const path = req.query.path as string || '';
+    const targetUrl = `${BACKEND_URL}/api/${path}`;
+
+    console.log('Proxying to:', targetUrl);
 
     // 转发请求到后端
     const response = await fetch(targetUrl, {

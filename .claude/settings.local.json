@@ -12,7 +12,8 @@
       "Bash(npm list:*)",
       "Bash(npx tsx:*)",
       "Bash(gh:*)",
-      "WebFetch(domain:ai-haigui-game-alpha.vercel.app)"
+      "WebFetch(domain:ai-haigui-game-alpha.vercel.app)",
+      "WebFetch(domain:vercel.com)"
     ]
   }
 }
