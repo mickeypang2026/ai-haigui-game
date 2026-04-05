@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ChatBox from '../../components/ChatBox'
-import { createSession, endSession, getSession, askQuestion, submitFinalGuess } from '../lib/api'
+import { createSession, getSession, askQuestion, submitFinalGuess } from '../lib/api'
 
 /**
  * 游戏状态
  */
-type GameStatus = 'playing' | 'ended' | 'revealed'
+type GameStatus = 'playing' | 'revealed'
 
 /**
  * 游戏页面 - 海龟汤核心玩法界面
@@ -84,7 +84,7 @@ export function Game() {
   }
 
   // 游戏是否已结束
-  const isGameEnded = gameStatus === 'ended' || gameStatus === 'revealed' || truthUnlocked
+  const isGameEnded = gameStatus === 'revealed' || truthUnlocked
 
   // 发送问题
   async function handleSendQuestion(question: string) {
@@ -112,36 +112,18 @@ export function Game() {
     }
   }
 
-  // 结束游戏 - 揭晓汤底（FR-05）
-  async function handleEndGame() {
+  // 查看汤底 - 解锁后跳转到 Result 页面
+  async function handleRevealTruth() {
     if (!sessionId) return
-
-    if (!window.confirm('确定要结束游戏吗？将揭晓汤底。')) {
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-
     try {
+      setLoading(true)
       await endSession(sessionId)
-      setGameStatus('ended')
-      setTruthUnlocked(true)
-      // 揭晓汤底，跳转到 Result 页面
-      setTimeout(() => {
-        navigate(`/result/${sessionId}`)
-      }, 500)
+      navigate(`/result/${sessionId}`)
     } catch (e) {
-      setError(e instanceof Error ? e.message : '结束失败')
+      setError(e instanceof Error ? e.message : '揭晓失败')
     } finally {
       setLoading(false)
     }
-  }
-
-  // 查看汤底 - 跳转到 Result 页面
-  function handleRevealTruth() {
-    if (!sessionId) return
-    navigate(`/result/${sessionId}`)
   }
 
   // 提交最终猜测
@@ -218,10 +200,10 @@ export function Game() {
             </Link>
             <span className={`text-xs px-2 py-1 rounded-full ${
               gameStatus === 'playing' ? 'bg-emerald-900/50 text-emerald-300' :
-              gameStatus === 'ended' ? 'bg-rose-900/50 text-rose-300' :
+              gameStatus === 'revealed' ? 'bg-amber-900/50 text-amber-300' :
               'bg-amber-900/50 text-amber-300'
             }`}>
-              {gameStatus === 'playing' ? '进行中' : gameStatus === 'ended' ? '已结束' : '已揭晓'}
+              {gameStatus === 'playing' ? '进行中' : '已揭晓'}
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -240,14 +222,6 @@ export function Game() {
               className="text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               查看汤底
-            </button>
-            <button
-              type="button"
-              onClick={handleEndGame}
-              disabled={loading || isGameEnded}
-              className="text-sm font-medium text-slate-400 hover:text-rose-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              结束游戏
             </button>
           </div>
         </div>
