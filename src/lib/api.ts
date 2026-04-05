@@ -1,5 +1,8 @@
 import type { SessionPublic, Story, YesNoIrrelevant } from './types'
 
+// 后端 API 地址 - 生产环境使用 Railway
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://ai-haigui-game-production-5e7b.up.railway.app'
+
 type ApiErrorBody = { message?: unknown }
 
 async function parseJsonSafe(res: Response): Promise<unknown> {
@@ -23,7 +26,10 @@ function toMessage(data: unknown): string {
 }
 
 async function requestJson<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
-  const res = await fetch(input, init)
+  const url = input.toString()
+  const fullUrl = url.startsWith('/api') ? `${API_BASE_URL}${url}` : input
+
+  const res = await fetch(fullUrl, init)
   const data = await parseJsonSafe(res)
   if (!res.ok) {
     throw new Error(toMessage(data))
