@@ -157,27 +157,57 @@ function Result() {
         ) : null}
 
         {!canReveal ? (
-          <div className="mt-6 rounded-lg border border-slate-800 bg-slate-950/40 p-6 animate-fade-in-up">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">🔒</span>
-              <div>
-                <h3 className="font-semibold text-slate-200">汤底尚未解锁</h3>
-                <p className="text-sm text-slate-400">继续提问或主动揭晓答案</p>
+          <div className="mt-6 space-y-6">
+            {/* 最终猜测输入框 - 未解锁时也可以提交 */}
+            <div className="rounded-lg border border-slate-700 bg-slate-900/50 p-5">
+              <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-slate-200">
+                <span>🎲</span>提交最终猜测
+              </h3>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  value={guess}
+                  onChange={(e) => setGuess(e.target.value)}
+                  disabled={busy}
+                  placeholder="我认为真相是……"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950/40 px-4 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') void handleSubmitFinal()
+                  }}
+                />
+                <button
+                  type="button"
+                  disabled={busy || !guess.trim()}
+                  onClick={() => void handleSubmitFinal()}
+                  className="rounded-lg bg-amber-400 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  提交
+                </button>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => navigate(`/game/${sessionId ?? ''}`)}
-                className="rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-slate-700/50 hover:border-amber-400/50"
-              >
-                返回继续提问
-              </button>
-              <button
-                onClick={() => navigate('/')}
-                className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-800/50"
-              >
-                返回大厅
-              </button>
+
+            {/* 汤底尚未解锁提示 */}
+            <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-6 animate-fade-in-up">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-3xl">🔒</span>
+                <div>
+                  <h3 className="font-semibold text-slate-200">汤底尚未解锁</h3>
+                  <p className="text-sm text-slate-400">提交最终猜测或返回继续提问</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => navigate(`/game/${sessionId ?? ''}`)}
+                  className="rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-slate-700/50 hover:border-amber-400/50"
+                >
+                  返回继续提问
+                </button>
+                <button
+                  onClick={() => navigate('/')}
+                  className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-800/50"
+                >
+                  返回大厅
+                </button>
+              </div>
             </div>
           </div>
         ) : null}
